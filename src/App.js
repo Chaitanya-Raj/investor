@@ -3,7 +3,7 @@ import Select from "react-select";
 import "./App.css";
 
 function App() {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState("");
 
   const [amount, setAmount] = useState("");
 
@@ -12,11 +12,27 @@ function App() {
   const [time, setTime] = useState("");
 
   const options = [
-    { value: "chocolate", label: "Simple Interest" },
-    { value: "strawberry", label: "Compound Interest" },
-    { value: "vanilla", label: "Present Value of Money" },
-    { value: "vanilla", label: "Future Value of Money" },
+    { value: "si", label: "Simple Interest" },
+    { value: "ci", label: "Compound Interest" },
+    { value: "pvm", label: "Present Value of Money" },
+    { value: "fvm", label: "Future Value of Money" },
   ];
+
+  const simpleInterest = () => {
+    setAmount(
+      parseFloat(principal) + parseFloat(principal * (interest / 100) * time)
+    );
+  };
+
+  const compoundInterest = () => {
+    setAmount(principal * (1 + interest / 100) ** time);
+  };
+
+  const handleInterest = (event) => {
+    if (selected.value === "si") simpleInterest();
+    else compoundInterest();
+    event.preventDefault();
+  };
 
   return (
     <div className="App">
@@ -26,67 +42,77 @@ function App() {
 
       <main>
         <Select
+          className="select"
           value={selected}
-          onChange={(event) => {
-            console.log(event.target.value);
-            setSelected();
+          onChange={(sel) => {
+            console.log(sel);
+            setAmount("");
+            setPrincipal("");
+            setInterest("");
+            setTime("");
+            setSelected(sel);
           }}
           options={options}
         ></Select>
-        <section>
-          <form>
-            <div className="float-label">
-              <input
-                type="text"
-                value={principal}
-                onChange={(event) => {
-                  setPrincipal(event.target.value);
-                }}
-              />
-              <label
-                className={principal !== "" ? "active" : ""}
-                htmlFor="principal"
-              >
-                Principal
-              </label>
-            </div>
-            <div className="float-label">
-              <input
-                type="text"
-                value={interest}
-                onChange={(event) => {
-                  setInterest(event.target.value);
-                }}
-              />
-              <label
-                className={interest !== "" ? "active" : ""}
-                htmlFor="Interest"
-              >
-                Interest
-              </label>
-            </div>
-            <div className="float-label">
-              <input
-                type="text"
-                value={time}
-                onChange={(event) => {
-                  setTime(event.target.value);
-                }}
-              />
-              <label className={time !== "" ? "active" : ""} htmlFor="time">
-                Time
-              </label>
-            </div>
-          </form>
-        </section>
-        <p>
-          {principal}
-          {interest}
-          {time}
-        </p>
-        <section></section>
-        <section></section>
-        <section></section>
+        {(selected.value === "si" || selected.value === "ci") && (
+          <section>
+            <form onSubmit={handleInterest}>
+              <div className="float-label">
+                <input
+                  type="number"
+                  value={principal}
+                  onChange={(event) => {
+                    setPrincipal(event.target.value);
+                  }}
+                />
+                <label
+                  className={principal !== "" ? "active" : ""}
+                  htmlFor="principal"
+                >
+                  Principal
+                </label>
+              </div>
+              <div className="float-label">
+                <input
+                  type="number"
+                  value={interest}
+                  onChange={(event) => {
+                    setInterest(event.target.value);
+                  }}
+                />
+                <label
+                  className={interest !== "" ? "active" : ""}
+                  htmlFor="Interest"
+                >
+                  Return
+                </label>
+              </div>
+              <div className="float-label">
+                <input
+                  type="number"
+                  value={time}
+                  onChange={(event) => {
+                    setTime(event.target.value);
+                  }}
+                />
+                <label className={time !== "" ? "active" : ""} htmlFor="time">
+                  Time
+                </label>
+              </div>
+              <button disabled={!principal || !interest || !time}>
+                Calculate
+              </button>
+            </form>
+          </section>
+        )}
+        {selected && (
+          <div className="float-label amount">
+            <input disabled type="number" value={amount} />
+            <label className={amount !== "" ? "active" : ""} htmlFor="Interest">
+              Amount
+            </label>
+          </div>
+        )}
       </main>
 
       <footer>
