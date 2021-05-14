@@ -42,7 +42,7 @@ function App() {
 
       <main>
         <Select
-          searchable={false}
+          isSearchable={false}
           isOptionDisabled={(option) => option.isdisabled}
           className="select"
           value={selected}
