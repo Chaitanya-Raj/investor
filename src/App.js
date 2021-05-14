@@ -14,8 +14,8 @@ function App() {
   const options = [
     { value: "si", label: "Simple Interest" },
     { value: "ci", label: "Compound Interest" },
-    { value: "pvm", label: "Present Value of Money" },
-    { value: "fvm", label: "Future Value of Money" },
+    { value: "pvm", label: "Present Value of Money", isdisabled: true },
+    { value: "fvm", label: "Future Value of Money", isdisabled: true },
   ];
 
   const simpleInterest = () => {
@@ -42,6 +42,7 @@ function App() {
 
       <main>
         <Select
+          isOptionDisabled={(option) => option.isdisabled}
           className="select"
           value={selected}
           onChange={(sel) => {
@@ -59,7 +60,7 @@ function App() {
             <form onSubmit={handleInterest}>
               <div className="float-label">
                 <input
-                  type="number"
+                  type="tel"
                   value={principal}
                   onChange={(event) => {
                     setPrincipal(event.target.value);
@@ -74,7 +75,7 @@ function App() {
               </div>
               <div className="float-label">
                 <input
-                  type="number"
+                  type="tel"
                   value={interest}
                   onChange={(event) => {
                     setInterest(event.target.value);
@@ -89,7 +90,7 @@ function App() {
               </div>
               <div className="float-label">
                 <input
-                  type="number"
+                  type="tel"
                   value={time}
                   onChange={(event) => {
                     setTime(event.target.value);
@@ -107,7 +108,7 @@ function App() {
         )}
         {selected && (
           <div className="float-label amount">
-            <input disabled type="number" value={amount} />
+            <input disabled type="text" value={amount} />
             <label className={amount !== "" ? "active" : ""} htmlFor="Interest">
               Amount
             </label>
